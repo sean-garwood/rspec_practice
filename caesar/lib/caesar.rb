@@ -1,27 +1,29 @@
-def caesar_cipher(string, shift)
-  caps = ('A'..'Z').to_a
-  down = ('a'..'z').to_a
-  shift %= 26
-  caesar = string.split('').map do |char|
-    if caps.include?(char)
-      char_position = (char.bytes[0] - 65)
-      shifted_position = char_position + shift
-      if shifted_position > 25
-        shifted_position %= 26
-      end
-      char = caps[shifted_position]
-    elsif down.include?(char)
-      char_position = (char.bytes[0] - 97)
-      shifted_position = char_position + shift
-      if shifted_position > 25
-        shifted_position %= 26
-      end
-      char = down[shifted_position]
-    else
-      char
-    end
+# shift a string by a certain offset
+# caps stay caps, lower stay lower
+# alphabet wraps--no symbols. Z, 1 => A
+class Cipher
+  CAPS = ('A'..'Z').to_a
+  DOWN = ('a'..'z').to_a
+  SHIFT_MOD = 26
+  CAPS_OFFSET = -65
+  DOWN_OFFSET = CAPS_OFFSET - 32
+
+  def offset(char)
+    char.bytes[0] + (CAPS.include?(char) ? CAPS_OFFSET : DOWN_OFFSET)
   end
-  caesar.join
+
+  def shift(char, pos)
+    CAPS.include?(char) ? CAPS[pos] : DOWN[pos]
+  end
+
+  def cipher(string, shift)
+    string.split.map do |char|
+      new_pos = offset(char) + shift
+      new_pos %= SHIFT_MOD if new_pos >= SHIFT_MOD
+      shift(char, new_pos)
+    end.join
+  end
 end
 
-puts caesar_cipher("What a string!", 5)
+n = Cipher.new
+puts n.cipher('a', 1)

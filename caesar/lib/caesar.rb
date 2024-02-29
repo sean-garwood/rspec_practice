@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # shift a string by a certain offset
 # caps stay caps, lower stay lower
 # alphabet wraps--no symbols. Z, 1 => A
@@ -24,6 +26,3 @@ class Cipher
     end.join
   end
 end
-
-n = Cipher.new
-puts n.cipher('a', 1)

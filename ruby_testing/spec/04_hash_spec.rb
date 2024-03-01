@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Hash do
+describe Hash do # rubocop:disable Metrics/BlockLength
   subject(:favorites) { { color: 'blue', food: 'fajitas' } }
 
   # As you discovered in the last assignment, the include matcher works on any
@@ -52,18 +52,15 @@ describe Hash do
     }
   end
 
-  # remove the 'x' before running this test
-  xit 'is newer than 2015' do
-    # Write a test that verifies the above statement.
+  it 'is newer than 2015' do
+    expect(subject[:year]).to be > 2015
   end
 
-  # remove the 'x' before running this test
-  xit 'has a parking camera' do
-    # Write a test that verifies the above statement.
+  it 'has a parking camera' do
+    expect(subject[:parking_camera?]).to be true
   end
 
-  # remove the 'x' before running this test
-  xit 'does not have assisted steering' do
-    # Write a test that verifies the above statement.
+  it 'does not have assisted steering' do
+    expect(subject[:assisted_steering?]).to be false
   end
 end

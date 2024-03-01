@@ -16,7 +16,6 @@ describe 'differences between eq, eql, equal, and be' do
       end
     end
 
-    # my_score is a Float and your_score is an Integer.
     context 'eql looks at type & value' do
       it 'is not eql to each other' do
         expect(my_score).not_to eql(your_score)
@@ -39,13 +38,12 @@ describe 'differences between eq, eql, equal, and be' do
       end
     end
 
-    # Some prefer to use 'be' over 'equal' because it semantically makes sense.
-    # expect(first_item).to be(second_item)
     context 'be and equal care about object identity' do
       it 'is comparing the same car' do
         expect(my_car).to equal(my_kids_borrow)
       end
 
+      # `be` is an alias for `equal`
       it 'is comparing the same car' do
         expect(my_car).to be(my_kids_borrow)
       end
@@ -67,21 +65,20 @@ describe 'equality assignment' do
   let(:amy) { { fav_color: 'blue', fav_food: 'tacos' } }
   let(:bob) { { fav_color: 'blue', fav_food: 'tacos' } }
   let(:copy_cat) { amy }
-  # Write a test that expresses each of the following statements.
 
-  # remove the 'x' before running this test
-  xit 'amy is eq to bob' do
+  it 'amy is eq to bob' do
+    expect(amy).to eq(bob)
   end
 
-  # remove the 'x' before running this test
-  xit 'amy is eql to bob' do
+  it 'amy is eql to bob' do
+    expect(amy).to eql(bob)
   end
 
-  # remove the 'x' before running this test
-  xit 'amy is not equal to bob' do
+  it 'amy is not equal to bob' do
+    expect(amy).not_to be(bob)
   end
 
-  # remove the 'x' before running this test
-  xit 'copy_cat is equal to amy' do
+  it 'copy_cat is equal to amy' do
+    expect(copy_cat).to eq(amy)
   end
 end

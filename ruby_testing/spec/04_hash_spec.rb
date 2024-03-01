@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Hash do # rubocop:disable Metrics/BlockLength
+describe Hash do
   subject(:favorites) { { color: 'blue', food: 'fajitas' } }
 
   # As you discovered in the last assignment, the include matcher works on any

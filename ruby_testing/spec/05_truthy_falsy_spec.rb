@@ -6,52 +6,43 @@
 
 describe 'truthy and falsy' do
   context 'almost everything is truthy' do
-    it 'is truthy' do
+    it 'strings are truthy' do
       expect('foo').to be_truthy
     end
 
-    it 'is truthy' do
-      expect(7).to be_truthy
-    end
-
-    it 'is truthy' do
+    it 'zero is truthy' do
       expect(0).to be_truthy
     end
 
-    it 'is truthy' do
-      expect(-100).to be_truthy
-    end
-
-    it 'is truthy' do
+    it 'floats are truthy' do
       expect(3.14159).to be_truthy
     end
 
-    it 'is truthy' do
+    it 'arrs are truthy' do
       expect([]).to be_truthy
     end
 
-    it 'is truthy' do
+    it 'hashes are truthy' do
       expect({}).to be_truthy
     end
 
-    it 'is truthy' do
+    it 'symbols are truthy' do
       expect(:any_symbol).to be_truthy
     end
 
-    it 'is truthy' do
+    it 'true is truly truthy' do
       expect(true).to be_truthy
+      # one should hope so
     end
   end
 
-  context 'only false and nil are falsy' do
-    it 'is falsy' do
+  context 'except for' do
+    it 'false is falsy' do
       expect(false).to be_falsy
     end
 
-    it 'is falsy' do
+    it 'nil is falsy' do
       expect(nil).to be_falsy
     end
   end
 end
-
-# There is no assignment for this lesson. Please continue to the next lesson.

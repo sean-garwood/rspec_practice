@@ -89,35 +89,31 @@ end
 describe Drink do
   describe '#initialize' do
     context 'when type is specified and ounces is default' do
-      # Create an explicit subject, using 'described_class' and your choice of
-      # beverage type.
+      subject(:horchata) { described_class.new('horchata') }
 
-      # remove the 'x' before running this test
-      xit 'is your choice of beverage' do
+      it 'is your choice of beverage' do
+        expect(horchata).to be(horchata)
       end
 
-      # remove the 'x' before running this test
-      xit 'has 16 ounces' do
+      it 'has 16 ounces' do
+        expect(horchata.ounces).to be(16)
       end
     end
   end
 
   describe '#full?' do
     context 'when drink has 16 ounces or more' do
-      # Create an explicit subject, using 'described_class' and your choice of
-      # beverage type.
+      subject(:olde_english) { described_class.new('OE', 40) }
 
-      # remove the 'x' before running this test
-      xit 'is full' do
+      it 'is full' do
+        expect(olde_english).to be_full
       end
     end
 
     context 'when drink has less than 16 ounces' do
-      # Create an explicit subject, using 'described_class' and your choice of
-      # beverage type. In addition, specify ounces to be any number under 16.
-
-      # remove the 'x' before running this test
-      xit 'is not full' do
+      subject(:wounded_soldier) { described_class.new('dregs', 5) }
+      it 'is not full' do
+        expect(wounded_soldier).not_to be_full
       end
     end
   end

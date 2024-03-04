@@ -11,6 +11,6 @@ class Pet
   end
 
   def meal_time
-    "#{name} paws at empty food bowl"
+    "*#{name} paws at empty food bowl*"
   end
 end

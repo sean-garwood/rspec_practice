@@ -70,34 +70,62 @@ describe MagicSeven do
   # Write a test for each of the following methods:
 
   describe '#subtract_four' do
+    context 'during step three, when four is subtracted from the previous result of 16' do
+      it 'returns 12' do
+        prev = 16
+        result = game.subtract_four(prev)
+        expect(result).to eq(12)
+      end
+    end
   end
 
   describe '#divide_by_two' do
+    context 'after 12 is returned, divide by two' do
+      it 'returns 6' do
+        prev = 12
+        result = game.divide_by_two(prev)
+        expect(result).to eq(6)
+      end
+    end
   end
 
   # The following tests will need you to create new instances of MagicSeven with
   # a specific value for the random_number.
   describe '#subtract_random_number' do
+    context 'when the previous step is 23 and the random number is 16' do
+      subject(:game_sixteen) { described_class.new(16) }
+
+      it 'returns 7' do
+        prev = 23
+        result = game_sixteen.subtract_random_number(prev)
+        expect(result).to eq(7)
+      end
+    end
   end
 
   # The #play method will always return seven! Test this game, using any
   # integer as the random_number. Update the context with the number.
   describe '#play' do
-    context 'when the random number is ...' do
-      # remove the 'x' before running this test
-      xit 'will return 7' do
+    context 'when the random number is 23' do
+      subject(:game_twenty_three) { described_class.new(23) }
+      it 'will return 7' do
+        expect(game_twenty_three.play).to eq(7)
       end
     end
 
-    context 'when the random number is ...' do
-      # remove the 'x' before running this test
-      xit 'will return 7' do
+    context 'when the random number is 666' do
+      subject(:evil) { described_class.new(666) }
+      it 'will still return 7' do
+        evil_to_good = evil.play
+        expect(evil_to_good).to eq(7)
       end
     end
 
-    context 'when the random number is ...' do
-      # remove the 'x' before running this test
-      xit 'will return 7' do
+    context 'when the random number is 777' do
+      subject(:divine) { described_class.new(777) }
+      it 'will *still* return 7' do
+        divine_to_lucky = divine.play
+        expect(divine_to_lucky).to eq(7)
       end
     end
   end

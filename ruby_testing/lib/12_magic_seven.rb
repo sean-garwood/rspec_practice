@@ -4,7 +4,7 @@
 class MagicSeven
   attr_reader :random_number
 
-  def initialize(random_number = rand(0..20))
+  def initialize(random_number = rand(0..200))
     @random_number = random_number
   end
 
@@ -75,6 +75,6 @@ class MagicSeven
   end
 end
 
-# game = MagicSeven.new
-# game.play
-# game.display_result
+game = MagicSeven.new
+game.play
+game.display_result

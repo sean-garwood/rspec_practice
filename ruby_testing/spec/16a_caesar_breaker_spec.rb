@@ -36,15 +36,13 @@ describe CaesarBreaker do
   end
 
   # ASSIGNMENT #1
-
   # Write a test for the following method.
-
   describe '#create_decrypted_messages' do
-    # This is a Looping Script Method.
-    # Located inside #decrypt (Public Script Method)
-
-    # Method with Outgoing Command -> Test that a message is sent
-    xit 'sends translate 26 times' do
+    # This is a Looping Script Method located inside #decrypt
+    #   Command -> Test that a message is sent
+    it 'sends translate 26 times' do
+      allow(translator).to receive(:translate)
+      expect { phrase.create_decrypted_messages }.to change { phrase.instance_variable_get(:@decrypted_messages).size }.by(26)
     end
   end
 
@@ -53,10 +51,8 @@ describe CaesarBreaker do
 
   # Some prefer explicitly including it in the configuration option.
   # https://rspec.info/features/3-12/rspec-core/helper-methods/modules/
-
   # Some prefer testing modules using a dummy class.
   # https://mixandgo.com/learn/how-to-test-ruby-modules-with-rspec
-
   # Modules can also be tested in a class that includes it, which is how the
   # following tests work.
 
@@ -79,13 +75,19 @@ describe CaesarBreaker do
       # ASSIGNMENT #2
       # Write the following 3 tests:
 
-      xit 'sends message to check the existance of the 16_cipher directory' do
+      it 'sends message to check the existence of the 16_cipher directory' do
+        expect(Dir).to receive(:exist?).once
+        phrase.save_decrypted_messages
       end
 
-      xit 'sends message to create a directory' do
+      it 'sends message to create a directory' do
+        expect(Dir).to receive(:mkdir).once
+        phrase.save_decrypted_messages
       end
 
-      xit 'sends message to create a file' do
+      it 'sends message to create a file' do
+        expect(File).to receive(:open).once
+        phrase.save_decrypted_messages
       end
     end
 
@@ -95,15 +97,22 @@ describe CaesarBreaker do
     # Method with Outgoing Commands -> Test that the messages are sent
     context 'when the directory exists' do
       before do
+        allow(Dir).to receive(:exist?).and_return(true)
       end
 
-      xit 'sends message to check the existance of the 16_cipher directory' do
+      it 'sends message to check the existence of the 16_cipher directory' do
+        expect(Dir).to receive(:exist?).once
+        phrase.save_decrypted_messages
       end
 
-      xit 'does not send message to create a directory' do
+      it 'does not send message to create a directory' do
+        expect(Dir).not_to receive(:mkdir)
+        phrase.save_decrypted_messages
       end
 
-      xit 'sends message to create a file' do
+      it 'sends message to create a file' do
+        expect(File).to receive(:open).once
+        phrase.save_decrypted_messages
       end
     end
 
@@ -157,7 +166,10 @@ describe CaesarBreaker do
   describe '#save_to_yaml' do
     # Method with Outgoing Command -> Test that a message is sent
 
-    xit 'dumps to yaml' do
+    it 'dumps to yaml' do
+      allow(YAML).to receive(:dump)
+      expect(YAML).to receive(:dump).once
+      phrase.save_to_yaml
     end
   end
 end

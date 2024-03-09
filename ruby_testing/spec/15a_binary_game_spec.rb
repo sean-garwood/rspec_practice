@@ -4,30 +4,13 @@ require_relative '../lib/15a_binary_game'
 require_relative '../lib/15b_binary_search'
 require_relative '../lib/15c_random_number'
 
-# The file order to complete this lesson:
-
-# 1. Familiarize yourself with the four lib/15 files.
-#    - lib/15_binary_main
-#    - lib/15a_binary_game
-#    - lib/15b_binary_search which is based on 14_find_number
-#    - lib/15c_random_number
-# 2. Read the comments in spec/15b_binary_search_spec
-# 3. Complete spec/15a_binary_game_spec
-
-# As noted above, the files for this lesson (#15) build on the TDD files
-# from #14. The FindNumber class is now called BinarySearch, which is a more
-# accurate description.
-
-# This lesson has a new class called BinaryGame. This BinaryGame class uses
-# the BinarySearch class and visualizes how a binary search works.
-
 # The focus of this lesson is unit testing, which is testing the behavior of
 # individual methods in isolation. However, every method does not need to be
 # tested, so we will look at some basic guidelines that determine whether or not
 # a method needs to be tested.
 # https://www.artofunittesting.com/definition-of-a-unit-test
 
-# In general, you probably have 4 different types of methods:
+# types
 # 1. Command - Changes the observable state, but does not return a value.
 # 2. Query - Returns a result, but does not change the observable state.
 # 3. Script - Only calls other methods, usually without returning anything.
@@ -35,11 +18,9 @@ require_relative '../lib/15c_random_number'
 #    anything, and stops when certain conditions are met.
 
 # Let's take a look at methods that should always be tested:
-
 # 1. Public Command or Public Query Methods should always be tested, because
 # they are the public interface. Command Methods should test the method's action
 # or side effect. Query Methods should test the method's return value.
-
 # 2. Command or Query Methods that are inside a public script or looping script
 # method should be tested. For the games that we are making, script and looping
 # script methods are just a convenient way to call the methods needed to play a
@@ -48,10 +29,8 @@ require_relative '../lib/15c_random_number'
 # that someone will be using your class to make their own game with customized
 # text. Any method that they would need in their game should be part of the
 # public interface and have test coverage.
-
 # 3. Any method that sends a command message to another class should always test
 # that those messages were sent.
-
 # 4. A Looping Script Method should test the behavior of the method. For
 # example, that it stops when certain conditions are met.
 
@@ -62,24 +41,17 @@ require_relative '../lib/15c_random_number'
 # 4. Looping Script Method -> Test the behavior of the method
 
 # There are a handful of methods that you do not need to test:
-
 # 1. You do not have to test #initialize if it is only creating instance
 # variables. However, if you call methods inside the initialize method, you
 # might need to test #initialize and/or the inside methods. In addition, you
 # will need to stub any inside methods because they will be called when you
 # create an instance of the class.
-
-# 2. You do not have to test methods that only contain 'puts' or 'gets' 
+# 2. You do not have to test methods that only contain 'puts' or 'gets'
 # because they are well-tested in the standard Ruby library.
-
 # 3. Private methods do not need to be tested because they should have test
 # coverage in public methods. However, as previously discussed, you may have
 # some private methods that are called inside a script or looping script method;
 # these methods should be tested publicly.
-
-# Open the file lib/15a_binary_game in a split screen, so you can see both
-# files at the same time. We will look at every method and determine if it will
-# need to be tested or not.
 
 describe BinaryGame do
   describe '#initialize' do
@@ -95,8 +67,7 @@ describe BinaryGame do
     # Located inside #play_game (Public Script Method)
     # Looping Script Method -> Test the behavior of the method (for example, it
     # stops when certain conditions are met).
-
-    # Note: #player_input will stop looping when the valid_input is between?(min, max)
+    # NOTE: #player_input will stop looping when the valid_input is between?(min, max)
 
     subject(:game_input) { described_class.new(1, 10) }
 
@@ -120,27 +91,42 @@ describe BinaryGame do
     end
 
     # ASSIGNMENT #1
-
     # Write a test for the following two context blocks. You will need to
     # provide 1-2 invalid inputs (letters, symbols, or numbers that are not
     # between the min & max integers) and one valid input number (as a string).
-
     # Remember that a stub can be called multiple times and return different values.
     # https://rspec.info/features/3-12/rspec-mocks/configuring-responses/returning-a-value/
 
     context 'when user inputs an incorrect value once, then a valid input' do
       before do
+        inval = 'a'
+        val = '3'
+        allow(game_input).to receive(:gets).and_return(inval, val)
       end
 
-      xit 'completes loop and displays error message once' do
+      it 'completes loop and displays error message once' do
+        min = game_input.instance_variable_get(:@minimum)
+        max = game_input.instance_variable_get(:@maximum)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game_input).to receive(:puts).with(error_message).once
+        game_input.player_input(min, max)
       end
     end
 
     context 'when user inputs two incorrect values, then a valid input' do
       before do
+        inval = 'a'
+        inval1 = 'b'
+        val = '3'
+        allow(game_input).to receive(:gets).and_return(inval, inval1, val)
       end
 
-      xit 'completes loop and displays error message twice' do
+      it 'completes loop and displays error message once' do
+        min = game_input.instance_variable_get(:@minimum)
+        max = game_input.instance_variable_get(:@maximum)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game_input).to receive(:puts).with(error_message).twice
+        game_input.player_input(min, max)
       end
     end
   end
@@ -149,19 +135,24 @@ describe BinaryGame do
 
   # Create a new instance of BinaryGame and write a test for the following two
   # context blocks.
+  # Query Method -> Test the return value
   describe '#verify_input' do
-    # Located inside #player_input (Looping Script Method)
-    # Query Method -> Test the return value
-
-    # Note: #verify_input will only return a number if it is between?(min, max)
-
+    subject(:verify_input_game) { described_class.new(1, 10) }
     context 'when given a valid input as argument' do
-      xit 'returns valid input' do
+      it 'returns valid input' do
+        min = verify_input_game.instance_variable_get(:@minimum)
+        max = verify_input_game.instance_variable_get(:@maximum)
+        input = 4
+        expect(verify_input_game.verify_input(min, max, input)).to eq(input)
       end
     end
 
     context 'when given invalid input as argument' do
-      xit 'returns nil' do
+      it 'returns nil' do
+        min = verify_input_game.instance_variable_get(:@minimum)
+        max = verify_input_game.instance_variable_get(:@maximum)
+        input = 1234
+        expect(verify_input_game.verify_input(min, max, input)).to be_nil
       end
     end
   end
@@ -184,19 +175,19 @@ describe BinaryGame do
 
     context 'when updating value of random number' do
       # Instead of using a normal double, as we did in TDD, we are going to
-      # use an instance_double. Differently from the normal test double we've 
-      # been using so far, a verifying double can produce an error if the method 
+      # use an instance_double. Differently from the normal test double we've
+      # been using so far, a verifying double can produce an error if the method
       # being stubbed does not exist in the actual class. Verifying doubles are a
       # great tool to use when you're doing integration testing and need to make
       # sure that different classes work together in order to fulfill some bigger
       # computation.
       # https://rspec.info/features/3-12/rspec-mocks/verifying-doubles/
 
-      # You should not use verifying doubles for unit testings. Unit testing relies 
+      # You should not use verifying doubles for unit testings. Unit testing relies
       # on using doubles to test the object in isolation (i.e., not dependent on any
-      # other object). One important concept to understand is that the BinarySearch 
+      # other object). One important concept to understand is that the BinarySearch
       # or FindNumber class doesn't care if it is given an actual random_number class
-      # object. It only cares that it is given an object that can respond to certain 
+      # object. It only cares that it is given an object that can respond to certain
       # methods. This concept is called polymorphism.
       # https://www.geeksforgeeks.org/polymorphism-in-ruby/
 
@@ -253,7 +244,10 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game minimum and maximum is 100 and 600' do
-      xit 'returns 9' do
+      subject(:game_hundreds) { described_class.new(100, 600) }
+      it 'returns 9' do
+        max_gs = game_hundreds.maximum_guesses
+        expect(max_gs).to eq(9)
       end
     end
   end
@@ -311,7 +305,16 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game_over? is false five times' do
-      xit 'calls display_turn_order five times' do
+      before do
+        allow(search_display).to receive(:game_over?).and_return(
+          false, false, false, false, false, true
+        )
+      end
+      it 'calls display_turn_order five times' do
+        expect(game_display).to receive(
+          :display_turn_order
+        ).with(search_display).exactly(5)
+        game_display.display_binary_search(search_display)
       end
     end
   end
@@ -327,39 +330,33 @@ describe BinaryGame do
     #  by calling #display_guess.
 
     # Create a new subject and an instance_double for BinarySearch.
+    subject(:game_turn) { described_class.new(1, 10, 5) }
+    let(:search_turn) { instance_double(BinarySearch) }
 
     before do
-      # You'll need to create a few method stubs.
+      allow(search_turn).to receive(:make_guess)
+      allow(search_turn).to receive(:update_range)
+      allow(game_turn).to receive(:display_guess)
     end
 
     # Command Method -> Test the change in the observable state
-    xit 'increases guess_count by one' do
+    it 'increases guess_count by one' do
+      expect do
+        game_turn.display_turn_order(search_turn)
+      end.to change { game_turn.instance_variable_get(:@guess_count) }.by(1)
     end
 
     # Method with Outgoing Command -> Test that a message is sent
-    xit 'sends make_guess' do
+    it 'sends make_guess' do
+      expect(search_turn).to receive(:make_guess).once
+      game_turn.display_turn_order(search_turn)
     end
 
     # Method with Outgoing Command -> Test that a message is sent
-    xit 'sends update_range' do
+    it 'sends update_range' do
+      expect(search_turn).to receive(:update_range).once
+      game_turn.display_turn_order(search_turn)
     end
-
-    # Using method expectations can be confusing. Stubbing the methods above
-    # does not cause this test to pass; it only 'allows' a method to be
-    # called, if it is called.
-
-    # To test this fact, let's allow a method that is not called in
-    # #display_turn_order. Uncomment the line at the bottom of this
-    # paragraph, move it to the before hook, and run the tests.
-    # All of the tests should continue to pass. Replace 'binary_search_turn'
-    # with whatever you named your BinarySearch instance double if necessary.
-    # allow(binary_search_turn).to receive(:game_over?)
-
-    # Now, in the lib/15a_binary_game.rb file, comment out either line,
-    # binary_search.make_guess or binary_search.update_range. Resave the file
-    # and rerun the tests. The test for the method that you commented out will
-    # fail because the method is never called. Now, uncomment the line & resave
-    # the file to have all tests passing.
   end
 
   describe '#introduction' do

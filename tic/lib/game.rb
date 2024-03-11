@@ -9,12 +9,12 @@ class Game
 
   attr_accessor :board, :player_one, :player_two, :turn_number, :winner
 
-  def initialize(player_one, player_two)
+  def initialize(player_one, player_two, board = NEW_BOARD)
     @player_one = player_one
     @player_two = player_two
-    @board = NEW_BOARD
+    @board = board
     @turn_number = 1
-    @winner = false
+    @winner = nil
   end
 
   def full?
@@ -55,7 +55,7 @@ class Game
           '[ ]'
         end
       end
-      puts readable.join('')
+      puts readable.join
     end
   end
 end

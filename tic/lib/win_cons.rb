@@ -2,6 +2,7 @@
 
 # check game termination
 module WinConditions
+  WIN_CON = 3
   def sum_diagonals
     sum_of_first_diag = 0
     sum_of_second_diag = 0
@@ -14,10 +15,9 @@ module WinConditions
 
   def winning_row?(cols = nil)
     img = cols ? board.transpose : board
-    win = 3
     img.each do |row|
       sum_of_row = row.reduce(0) { |sum, value| sum + value }
-      return true if sum_of_row.abs == win
+      return true if sum_of_row.abs == WIN_CON
 
       next
     end
@@ -29,14 +29,14 @@ module WinConditions
   end
 
   def winning_diagonal?
-    sum_diagonals.include?(3)
+    sum_diagonals.include?(WIN_CON)
   end
 
   def over?
-    @winner || cats_game?
+    won? || cats_game?
   end
 
-  def check_winner
+  def won?
     winning_column? || winning_diagonal? || winning_row?
   end
 
@@ -44,11 +44,11 @@ module WinConditions
     @winner = player
     puts("#{player} wins!")
     puts self
-    exit
+    # exit
   end
 
   def cats_game?
-    full? && !@winner
+    full? && !won?
   end
 
   def declare_tie

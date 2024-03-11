@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require '../lib/tic'
+require_relative '../lib/game'
+require_relative '../lib/player'
+require_relative '../lib/win_cons'
 
 # types
 # 1. Command - Changes the observable state, but does not return a value.
@@ -8,7 +10,6 @@ require '../lib/tic'
 # 3. Script - Only calls other methods, usually without returning anything.
 # 4. Looping Script - Only calls other methods, usually without returning
 #    anything, and stops when certain conditions are met.
-
 # always test
 # 1. Public Command or Public Query Methods should always be tested, because
 # they are the public interface. Command Methods should test the method's action
@@ -25,7 +26,6 @@ require '../lib/tic'
 # that those messages were sent.
 # 4. A Looping Script Method should test the behavior of the method. For
 # example, that it stops when certain conditions are met.
-
 # don't test:
 # 1. You do not have to test #initialize if it is only creating instance
 # variables. However, if you call methods inside the initialize method, you
@@ -38,9 +38,114 @@ require '../lib/tic'
 # coverage in public methods. However, as previously discussed, you may have
 # some private methods that are called inside a script or looping script method;
 # these methods should be tested publicly.
-
 # summary
 # 1. Command Method -> Test the change in the observable state
 # 2. Query Method -> Test the return value
 # 3. Method with Outgoing Command -> Test that a message is sent
 # 4. Looping Script Method -> Test the behavior of the method
+
+describe Game do
+  let(:p1) { instance_double(Player, name: 'player 1') }
+  let(:p2) { instance_double(Player, name: 'player 2') }
+  let(:x) { 1 }
+  let(:o) { -1 }
+  let(:blank) { 0 }
+
+  shared_examples 'a full board' do
+    describe '#full?' do
+      it 'is full' do
+        expect(game).to be_full
+      end
+    end
+    describe '#winning_row?' do
+      it 'is a winning row' do
+        expect(game).to be_winning_row
+      end
+    end
+    describe '#winning_column?' do
+      it 'is a winning column' do
+        expect(game).to be_winning_column
+      end
+    end
+    describe '#sum_diagonals' do
+      it 'equals [3, 3]' do
+        expect(game.sum_diagonals).to eq([3, 3])
+      end
+    end
+    describe '#winning_diagonal?' do
+      it 'is a winning diagonal' do
+        expect(game).to be_winning_diagonal
+      end
+    end
+    describe '#over?' do
+      it 'is over' do
+        expect(game).to be_over
+      end
+    end
+    describe '#cats_game?' do
+      it 'is not a tie' do
+        expect(game).not_to be_cats_game
+      end
+    end
+    describe '#declare_winner' do
+      it 'modifies the winner' do
+        winning_player = 'sean'
+        expect do
+          game.declare_winner(winning_player)
+        end.to change { game.winner }.from(nil).to(winning_player)
+      end
+    end
+    describe '#bump_turn_number' do
+      it 'increases turn number by 1' do
+        expect { game.bump_turn_number }.to change { game.turn_number }.from(1).to(2)
+      end
+    end
+    describe '#mark_square' do
+      it 'does not change the top-left square' do
+        row = 0
+        col = 0
+        letter = 'z'
+        expect do
+          game.mark_square(row, col, letter)
+        end.not_to(change { game.board[0][0] })
+      end
+    end
+  end
+
+  context 'when the board is full of Xs' do
+    let(:all_x_board) { Array.new(3) { Array.new(3, x) } }
+    subject(:game) { described_class.new(p1, p2, all_x_board) }
+    it_behaves_like 'a full board'
+  end
+
+  context 'when the board is full of Os' do
+    let(:all_o_board) { Array.new(3) { Array.new(3, o) } }
+    subject(:game) { described_class.new(p1, p2, all_o_board) }
+    it_behaves_like 'a full board'
+  end
+
+  context 'when the board is empty' do
+    let(:empty_board) { Array.new(3) { Array.new(3, blank) } }
+    subject(:game) { described_class.new(p1, p2, empty_board) }
+    describe '#mark_square' do
+      it 'changes the top-left square from blank to something' do
+        row = 0
+        col = 0
+        letter = x
+        expect do
+          game.mark_square(row, col, letter)
+        end.to change { game.board[0][0] }.from(0).to(1)
+      end
+    end
+    describe '#full?' do
+      it 'is not full' do
+        expect(game).not_to be_full
+      end
+    end
+    describe '#won?' do
+      it 'is no winner' do
+        expect(game).not_to be_won
+      end
+    end
+  end
+end

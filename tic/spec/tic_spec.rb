@@ -50,6 +50,7 @@ describe Game do
   let(:x) { 1 }
   let(:o) { -1 }
   let(:blank) { 0 }
+  let(:win_con) { WinConditions::WIN_CON }
   shared_examples 'a full board' do
     describe '#full?' do
       it 'is full' do
@@ -67,8 +68,8 @@ describe Game do
       end
     end
     describe '#sum_diagonals' do
-      it 'equals [3, 3]' do
-        expect(game.sum_diagonals).to eq([3, 3])
+      it 'equals [4, 4]' do
+        expect(game.sum_diagonals).to eq([4, 4])
       end
     end
     describe '#winning_diagonal?' do
@@ -112,19 +113,19 @@ describe Game do
   end
 
   context 'when the board is full of Xs' do
-    let(:all_x_board) { Array.new(3) { Array.new(3, x) } }
+    let(:all_x_board) { Array.new(win_con) { Array.new(win_con, x) } }
     subject(:game) { described_class.new(p1, p2, all_x_board) }
     it_behaves_like 'a full board'
   end
 
   context 'when the board is full of Os' do
-    let(:all_o_board) { Array.new(3) { Array.new(3, o) } }
+    let(:all_o_board) { Array.new(win_con) { Array.new(win_con, o) } }
     subject(:game) { described_class.new(p1, p2, all_o_board) }
     it_behaves_like 'a full board'
   end
 
   context 'when the board is empty' do
-    let(:empty_board) { Array.new(3) { Array.new(3, blank) } }
+    let(:empty_board) { Array.new(win_con) { Array.new(win_con, blank) } }
     subject(:game) { described_class.new(p1, p2, empty_board) }
     describe '#mark_square' do
       it 'changes the top-left square from blank to something' do

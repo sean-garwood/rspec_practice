@@ -3,8 +3,6 @@
 require_relative 'win_cons'
 # initializes the game, declares winner
 class Game
-  EMPTY_SPACE = 0
-  NEW_BOARD = Array.new(3) { Array.new(3, EMPTY_SPACE) }
   include WinConditions
 
   attr_accessor :board, :player_one, :player_two, :turn_number, :winner
@@ -38,7 +36,7 @@ class Game
     puts 'Enter the column.'
     col = gets.chomp.to_i
     mark_square(row, col, player.letter)
-    check_winner ? declare_winner(player) : false
+    won? ? declare_winner(player) : false
     bump_turn_number
     cats_game? ? declare_tie : nil
   end

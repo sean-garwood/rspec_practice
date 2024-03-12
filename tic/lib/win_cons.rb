@@ -2,7 +2,9 @@
 
 # check game termination
 module WinConditions
-  WIN_CON = 3
+  EMPTY_SPACE = 0
+  WIN_CON = 4
+  NEW_BOARD = Array.new(WIN_CON) { Array.new(WIN_CON, EMPTY_SPACE) }
   def sum_diagonals
     sum_of_first_diag = 0
     sum_of_second_diag = 0
@@ -44,7 +46,7 @@ module WinConditions
     @winner = player
     puts("#{player} wins!")
     puts self
-    # exit
+    exit
   end
 
   def cats_game?

@@ -50,7 +50,6 @@ describe Game do
   let(:x) { 1 }
   let(:o) { -1 }
   let(:blank) { 0 }
-
   shared_examples 'a full board' do
     describe '#full?' do
       it 'is full' do
@@ -145,6 +144,24 @@ describe Game do
     describe '#won?' do
       it 'is no winner' do
         expect(game).not_to be_won
+      end
+    end
+  end
+end
+describe Player do
+  subject(:player_one) { described_class.new }
+  context 'when players is odd' do
+    describe '#player_letter' do
+      it 'is one' do
+        expect(player_one.letter).to eq(1)
+      end
+    end
+  end
+  subject(:player_two) { described_class.new }
+  context 'when players is even' do
+    describe '#player_letter' do
+      it 'is neg one' do
+        expect(player_two.letter).to eq(-1)
       end
     end
   end

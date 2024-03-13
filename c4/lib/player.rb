@@ -18,12 +18,14 @@ class Player
   end
 
   def input_move
+    input = nil
     loop do
       input = verify_input(prompt_input)
       break if input
 
       puts 'Invalid input. Please try again.'
     end
+    input
   end
 
   def verify_input(number)

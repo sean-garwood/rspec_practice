@@ -42,7 +42,6 @@ describe Player do
   end
 
   describe '#input_move' do
-    # verify that input move receives puts with errmsg when given invalid input
     subject(:player_move) { described_class.new }
     let(:err_msg) { 'Invalid input. Please try again.' }
     let(:invalid) { '-1' }
@@ -55,6 +54,9 @@ describe Player do
       it 'breaks and does not return err msg' do
         expect(player_move).not_to receive(:puts).with(err_msg)
         player_move.input_move
+      end
+      it 'returns a number' do
+        expect(player_move.input_move).to eq(valid.to_i)
       end
     end
     context 'when given an invalid input and then a valid input' do

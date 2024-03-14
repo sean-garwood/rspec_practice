@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
 require_relative '../lib/game'
 require_relative '../lib/player'
+require_relative '../lib/win_cons'
 
 describe Game do
   subject(:std_game) { described_class.new }
@@ -113,6 +115,67 @@ describe Game do
         allow_any_instance_of(Game).to receive(:take_turn).and_return(nil)
         expect(turns_game).to receive(:take_turn).twice
         turns_game.take_turns
+      end
+    end
+  end
+  describe '#winning_col?' do
+    context 'when there is no winning column' do
+      subject(:non_winning_col_game) { described_class.new }
+
+      it 'returns false' do
+        expect(non_winning_col_game.winning_col?).to be false
+      end
+    end
+
+    context 'when there is a winning column' do
+      subject(:winning_col_game) { described_class.new }
+
+      it 'returns true' do
+        winning_col = 3
+        winning_token = 'X'
+        winning_col_game.cols[winning_col] = [winning_token] * 4
+        expect(winning_col_game.winning_col?).to be true
+      end
+    end
+  end
+  describe '#winning_row?' do
+    context 'when there is no winning row' do
+      subject(:non_winning_row_game) { described_class.new }
+
+      it 'returns false' do
+        expect(non_winning_row_game.winning_row?).to be false
+      end
+    end
+
+    context 'when there is a winning row' do
+      subject(:winning_row_game) { described_class.new }
+
+      it 'returns true' do
+        winning_row = 0
+        winning_token = 'X'
+        winning_row_game.cols[0..4].each { |col| col[0] = winning_token }
+        expect(winning_row_game.winning_row?).to be true
+      end
+    end
+  end
+  describe '#winning_diag?' do
+    context 'when there is no winning diagonal' do
+      subject(:non_winning_diag_game) { described_class.new }
+
+      it 'returns false' do
+        expect(non_winning_diag_game.winning_diag?).to be false
+      end
+    end
+    context 'when there is a winning diagonal' do
+      subject(:winning_diag_game) { described_class.new }
+
+      it 'returns true' do
+        winning_token = 'X'
+        winning_diag_game.cols[0][0] = winning_token
+        winning_diag_game.cols[1][1] = winning_token
+        winning_diag_game.cols[2][2] = winning_token
+        winning_diag_game.cols[3][3] = winning_token
+        expect(winning_diag_game.winning_diag?).to be true
       end
     end
   end

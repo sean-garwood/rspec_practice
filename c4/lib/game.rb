@@ -15,11 +15,11 @@ class Game
   ].freeze
   def initialize(*args)
     @cols, @player1, @player2, @winner = args.empty? ? ARGS : args
-    lemmy_speaks
   end
 
   def play
     take_turns until game_over?
+    declare_winner
   end
 
   def take_turns
@@ -29,13 +29,15 @@ class Game
   end
 
   def game_over?
-    full? || winner || winning_position?
+    full? || winning_position?
   end
 
   def take_turn(player)
+    print_board
     col = player.input_move
     row = top_row(col)
     drop_token(col, row, player)
+    set_winner(player)
   end
 
   def drop_token(col, row, player)
@@ -44,6 +46,10 @@ class Game
 
   def legal?(move)
     (0..NUM_ROWS).include?(move) && !full?(move)
+  end
+
+  def set_winner(player)
+    @winner = player if winning_position?
   end
 
   private
@@ -58,5 +64,9 @@ class Game
 
       What say we get to it, then?
     HEREDOC
+  end
+
+  def declare_winner
+    puts winner ? "#{winner} wins!" : 'It\'s a draw!'
   end
 end

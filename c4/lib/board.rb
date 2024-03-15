@@ -32,4 +32,15 @@ module Board
 
     cols[column].all?
   end
+
+  def print_board
+    puts ' 0 1 2 3 4 5 6'
+    NUM_ROWS.times do |row|
+      print '|'
+      NUM_COLS.times do |col|
+        print "#{cols[col][NUM_ROWS - row - 1] || ' '}|"
+      end
+      puts
+    end
+  end
 end

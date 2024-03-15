@@ -51,9 +51,15 @@ describe Game do
         before do
           allow(logic_player).to receive(:input_move)
           allow(logic_game).to receive(:top_row).and_return(0)
+          allow(logic_game).to receive(:top_row).and_return(0)
+          allow(logic_game).to receive(:set_winner).and_return(logic_player)
         end
         it 'calls Player' do
           expect(logic_player).to receive(:input_move)
+          logic_game.take_turn(logic_player)
+        end
+        it 'sets a winner' do
+          expect(logic_game).to receive(:set_winner).with(logic_player)
           logic_game.take_turn(logic_player)
         end
       end

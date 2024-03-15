@@ -38,4 +38,8 @@ class Player
     puts 'Enter a column number (0-6):'
     gets.chomp
   end
+
+  def to_s
+    name
+  end
 end

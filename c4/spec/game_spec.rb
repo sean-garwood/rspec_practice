@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../lib/game'
-require_relative '../lib/player'
+require_relative '../lib/board'
 require_relative '../lib/win_cons'
+require_relative '../lib/player'
+require_relative '../lib/game'
 
 describe Game do
   subject(:std_game) { described_class.new }
